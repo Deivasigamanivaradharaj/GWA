@@ -4,6 +4,7 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Swal from "sweetalert2";
 import events from "./events";
+import axios from "axios";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -11,6 +12,29 @@ const localizer = momentLocalizer(moment);
 const styles = ".rbc-event{background:blue;border-radius:5px;text-align:center}";
 
 export default function ReactBigCalendar() {
+  const [doctor, setDoctor] = useState({});
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      }
+    };
+    
+    const fetchDoctorData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/doctor/doctor-index',{
+          params: {
+            email: "deivasigamani@gmail.com",
+          },}, config); // Replace with your API endpoint
+        console.log(response)
+        setDoctor(response.data);
+      } catch (error) {
+        console.error('Error fetching doctor data:', error);
+      }
+    };
+    fetchDoctorData();
+  }, []);
 
   function onselectevent(e){
     Swal.fire({
@@ -37,6 +61,8 @@ export default function ReactBigCalendar() {
   }
 
   function onSelectSlot(e){
+    console.log(doctor)
+    let date = e.start.toDateString();
     Swal.fire({
       title: "Add new time slot",
       html: `
@@ -55,6 +81,11 @@ export default function ReactBigCalendar() {
         <label htmlFor="SelectHospital">Select Hospital</label>
         <input type="text" id="selecthospital"/>
       </div>
+      <select id="hospital" name="hospital" class="form-control">
+                            <% doctor.hospitals.forEach(hospital => { %>
+                                <option value="<%= hospital.name %>"><%= hospital.name %> - <%= hospital.street %>, <%= hospital.city %>, <%= hospital.state %>, <%= hospital.country %>, <%= hospital.zip %></option>
+                            <% }); %>
+                        </select>
     </form>
         `,
         confirmButtonText: `Add Time Slot `,
@@ -87,7 +118,7 @@ export default function ReactBigCalendar() {
   return (
     
       <Calendar
-        views={["month"]}
+        views={["month", "day"]}
         selectable
         localizer={localizer}
         defaultDate={new Date()}
