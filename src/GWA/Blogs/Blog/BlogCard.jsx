@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
+import DetailedBlog from "./DetailedBlog";
+import BlogDetails from "./BlogDetails";
+import PostComment from "./PostComment";
 
 const BlogCard = () => {
+let [showBlogDetails, setShowBlogDetails] = useState(false)
+
   return (
-    <div className="blog-card-cnt">
+    <>
+    <div className="blog-card-cnt" onClick={(e)=>{
+      e.preventDefault();
+      if(showBlogDetails){
+        setShowBlogDetails(false)
+      }
+      else{
+        setShowBlogDetails(true)
+      }
+    }} >
       <img
         src="https://s3-alpha-sig.figma.com/img/a090/4ed3/75794b707ee77d9722968ddc31d203bd?Expires=1722816000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=HaCdcKMKsgQv0ZniCZsvbt-RwhCXFrc8Qqso-TrXkVHSFKEMEsLraw5GGUMEfJsQozkI42YWBwd2b8iGnlO6jcBUNpQmF6lDbT2oSB~yXKdCpWqEB2nZeJtFp6yPYX~WjK5h37-8XdkCvnIS5CVGEsugC~Zbx-pzMnQHwAC730HhwBGVwZlAT1YRLuRmBeOKGT--oYhSVrjhbAHE699GYFHd2a-pCLimIThoI~8y17D3hV5pAPGF1qyydGn3mBCyE0ZOSb5Wj261KsXk9oArb7FzdnXCzgVbkfIJpkkS14yFO64D~iqtpUB1mOf8r92gJr~PMCWhsquWTlM9lIQZhg__"
         alt="image"
@@ -71,6 +85,11 @@ const BlogCard = () => {
         </svg>
       </div>
     </div>
+    <div className="blogdetailstransition" style={{ display: showBlogDetails? 'block': 'none',}}>
+    <BlogDetails></BlogDetails>
+    <PostComment></PostComment>
+    </div>
+    </>
   );
 };
 

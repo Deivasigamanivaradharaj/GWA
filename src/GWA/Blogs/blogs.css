@@ -744,3 +744,7 @@
 
 @media (min-width: 1000px) {
 }
+
+.blogdetailstransition{
+  transition: all 0.25s cubic-bezier(0.5, 0, 0.1, 1) 0s;;
+}
